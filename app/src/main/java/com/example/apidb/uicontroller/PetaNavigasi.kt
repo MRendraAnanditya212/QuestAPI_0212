@@ -3,8 +3,13 @@ package com.example.apidb.uicontroller
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-
+import com.example.apidb.uicontroller.route.DestinasiEntry
+import com.example.apidb.uicontroller.route.DestinasiHome
+import com.example.apidb.view.EntrySiswaScreen
+import com.example.apidb.view.HomeScreen
 
 @Composable
 fun DataSiswaApp(
@@ -19,5 +24,20 @@ fun HostNavigasi(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-
+    NavHost(
+        navController = navController,
+        startDestination = DestinasiHome.route,
+        modifier = modifier
+    ) {
+        composable(DestinasiHome.route) {
+            HomeScreen(
+                navigateToItemEntry = { navController.navigate(DestinasiEntry.route) }
+            )
+        }
+        composable(DestinasiEntry.route) {
+            EntrySiswaScreen(
+                navigateBack = { navController.navigate(DestinasiHome.route) }
+            )
+        }
+    }
 }
