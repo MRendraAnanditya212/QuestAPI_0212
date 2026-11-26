@@ -20,5 +20,25 @@ sealed interface StatusUiSiswa {
 class HomeViewModel(
     private val repositoryDataSiswa: RepositoryDataSiswa
 ) : ViewModel() {
+    var listSiswa: StatusUiSiswa by mutableStateOf(StatusUiSiswa.Loading)
+        private set
 
+    init {
+        loadSiswa()
+    }
+
+    fun loadSiswa() {
+        viewModelScope.launch {
+            listSiswa = StatusUiSiswa.Loading
+            listSiswa = try {
+                StatusUiSiswa.Success(repositoryDataSiswa.getDataSiswa())
+            } catch (e: IOException) {
+                StatusUiSiswa.Error
+            } catch (e: HttpException) {
+                StatusUiSiswa.Error
+            } catch (e: Exception) {
+                StatusUiSiswa.Error
+            }
+        }
+    }
 }
